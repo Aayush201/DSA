@@ -53,13 +53,47 @@ public:
         free(tmp);
         return dummyHead;
     }
+    Node *solveRecursive(Node *arr[], int K)
+    {
+        Node *dummyHead = new Node(-1);
+        Node *tmp = dummyHead;
+        priority_queue<pair<int, Node *>, vector<pair<int, Node *>>, greater<pair<int, Node *>>> q;
+        for (int i = 0; i < K; i++)
+        {
+            q.push({arr[i]->data, arr[i]});
+        }
+        while (!q.empty())
+        {
+            pair<int, Node *> p = q.top();
+            q.pop();
+            tmp->next = p.second;
+            tmp = tmp->next;
+            if (p.second->next)
+            {
+                q.push({(p.second->next)->data, p.second->next});
+            }
+        }
+        tmp = dummyHead;
+        dummyHead = dummyHead->next;
+        free(tmp);
+        return dummyHead;
+    }
+
     Node *mergeKLists(Node *arr[], int K)
     {
         // Your code here
-        if (K - 1 == 0)
-            return arr[K - 1];
-        Node *secondRoot = mergeKLists(arr, K - 1);
-        arr[K - 1] = mergeLinkedLists(arr[K - 1], secondRoot);
-        return arr[K - 1];
+        // There are two ways to solve this question, first one takes the help of the recursion and second one uses min-heap
+
+        /* RECURSION ONE */
+
+        // if (K - 1 == 0)
+        //     return arr[K - 1];
+        // Node *secondRoot = mergeKLists(arr, K - 1);
+        // arr[K - 1] = mergeLinkedLists(arr[K - 1], secondRoot);
+        // return arr[K - 1];
+
+        /* MIN HEAP ONE */
+        Node *head = solveRecursive(arr, K);
+        return head;
     }
 };
